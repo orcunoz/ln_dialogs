@@ -1,5 +1,5 @@
 name: ln_dialogs
-description: A starting point for Dart libraries or applications.
+description: Ln dialogs
 version: 1.0.0
 repository: https://github.com/orcunoz/ln_dialogs
 publish_to: none
@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # path: ^1.8.0
   intl: ^0.18.0
   ln_core:
     git:
