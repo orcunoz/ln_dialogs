@@ -29,11 +29,12 @@ class DialogHeader extends StatelessWidget {
 
     final textFieldBorder = theme.inputDecorationTheme.defaultBorder;
 
-    final headerBorderRadius = borderRadius ??
-        theme.dialogTheme.shape?.borderRadius?.at(context).copyWith(
-              bottomLeft: Radius.zero,
-              bottomRight: Radius.zero,
-            );
+    final headerBorderRadius =
+        (borderRadius ?? theme.dialogTheme.shape?.borderRadius?.at(context))
+            ?.copyWith(
+      bottomLeft: Radius.zero,
+      bottomRight: Radius.zero,
+    );
 
     return Material(
       type: backgroundColor != null
