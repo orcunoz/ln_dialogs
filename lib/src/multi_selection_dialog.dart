@@ -147,7 +147,7 @@ class _MultiSelectionDialogState<ItemType>
                 },
               )
             : SizedBox.square(
-                child: CustomError.noResultsFound(context: context),
+                child: Icon(Icons.web_asset_off_rounded),
               ),
       ),
     );

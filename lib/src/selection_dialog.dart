@@ -157,7 +157,7 @@ class _SelectionDialogState<ItemType> extends State<SelectionDialog<ItemType>> {
                 ),
               )
             : Center(
-                child: CustomError.noResultsFound(context: context),
+                child: Icon(Icons.web_asset_off_rounded),
               ),
       ),
     );

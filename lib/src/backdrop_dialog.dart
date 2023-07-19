@@ -8,11 +8,13 @@ class BackdropDialog extends StatelessWidget {
   final String? title;
   final Function()? onTapClose;
   final BorderRadius? headerBorderRadius;
+  final Color? headerForegroundColor;
   final Color? headerBackgroundColor;
   const BackdropDialog({
     super.key,
     required this.body,
     this.title,
+    this.headerForegroundColor,
     this.headerBackgroundColor,
     this.headerBorderRadius,
     this.onTapClose,
@@ -20,8 +22,9 @@ class BackdropDialog extends StatelessWidget {
 
   static Future show({
     required BuildContext context,
-    required Widget body,
+    required WidgetBuilder builder,
     String? title,
+    Color? headerForegroundColor,
     Color? headerBackgroundColor,
     BorderRadius? headerBorderRadius,
     bool showCloseButton = true,
@@ -38,14 +41,6 @@ class BackdropDialog extends StatelessWidget {
 
     var curveTween = CurveTween(curve: Curves.ease);
 
-    var child = BackdropDialog(
-      body: body,
-      title: title,
-      headerBackgroundColor: headerBackgroundColor,
-      headerBorderRadius: headerBorderRadius,
-      onTapClose: showCloseButton ? () => Navigator.of(context).pop() : null,
-    );
-
     return showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -59,13 +54,25 @@ class BackdropDialog extends StatelessWidget {
       },
       transitionDuration:
           animationDuration ?? const Duration(milliseconds: 500),
-      pageBuilder: (context, anim1, anim2) => heightFactor == null
-          ? child
-          : FractionallySizedBox(
-              heightFactor: heightFactor,
-              alignment: Alignment.bottomCenter,
-              child: child,
-            ),
+      pageBuilder: (context, anim1, anim2) {
+        var child = BackdropDialog(
+          body: builder(context),
+          title: title,
+          headerForegroundColor: headerForegroundColor,
+          headerBackgroundColor: headerBackgroundColor,
+          headerBorderRadius: headerBorderRadius,
+          onTapClose:
+              showCloseButton ? () => Navigator.of(context).pop() : null,
+        );
+
+        return heightFactor == null
+            ? child
+            : FractionallySizedBox(
+                heightFactor: heightFactor,
+                alignment: Alignment.bottomCenter,
+                child: child,
+              );
+      },
     );
   }
 
@@ -75,6 +82,7 @@ class BackdropDialog extends StatelessWidget {
         ? null
         : DialogHeader(
             title: title ?? "",
+            foregroundColor: headerForegroundColor,
             backgroundColor: headerBackgroundColor,
             borderRadius: headerBorderRadius,
             onTapClose: onTapClose,
@@ -92,9 +100,7 @@ class BackdropDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   header,
-                  Expanded(
-                    child: body,
-                  ),
+                  Expanded(child: body),
                 ],
               ),
       ),
