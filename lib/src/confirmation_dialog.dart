@@ -7,10 +7,8 @@ class ConfirmationDialog extends AlertDialog {
     super.key,
     String? title,
     required String message,
-    String? submitButtonText,
-    void Function()? onSubmit,
-    String? cancelButtonText,
-    void Function()? onCancel,
+    LnDialogButton confirmButton = const LnDialogButton.confirm(),
+    LnDialogButton rejectButton = const LnDialogButton.reject(),
     double maxWidth = maxDialogWidth,
   }) : super(
           title: title != null ? Text(title) : null,
@@ -19,22 +17,8 @@ class ConfirmationDialog extends AlertDialog {
             child: Text(message),
           ),
           actions: <Widget>[
-            TextButton(
-              child: Text(submitButtonText ??
-                  MaterialLocalizations.of(context).okButtonLabel),
-              onPressed: () {
-                Navigator.of(context).pop<bool>(true);
-                onSubmit?.call();
-              },
-            ),
-            TextButton(
-              child: Text(cancelButtonText ??
-                  MaterialLocalizations.of(context).cancelButtonLabel),
-              onPressed: () {
-                Navigator.of(context).pop<bool>(false);
-                onCancel?.call();
-              },
-            ),
+            confirmButton,
+            rejectButton,
           ],
         );
 
@@ -42,23 +26,18 @@ class ConfirmationDialog extends AlertDialog {
     required BuildContext context,
     String? title,
     required String message,
-    String? submitButtonText,
-    void Function()? onSubmit,
-    String? cancelButtonText,
-    void Function()? onCancel,
-  }) {
-    return showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ConfirmationDialog(
+    LnDialogButton confirmButton = const LnDialogButton.confirm(),
+    LnDialogButton rejectButton = const LnDialogButton.reject(),
+  }) =>
+      showDialog<bool>(
         context: context,
-        title: title,
-        message: message,
-        submitButtonText: submitButtonText,
-        onSubmit: onSubmit,
-        cancelButtonText: cancelButtonText,
-        onCancel: onCancel,
-      ),
-    ).then((value) => value ?? false);
-  }
+        barrierDismissible: false,
+        builder: (context) => ConfirmationDialog(
+          context: context,
+          title: title,
+          message: message,
+          confirmButton: confirmButton,
+          rejectButton: rejectButton,
+        ),
+      ).then((value) => value ?? false);
 }

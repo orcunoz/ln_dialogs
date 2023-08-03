@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ln_core/ln_core.dart';
 import 'package:ln_dialogs/ln_dialogs.dart';
 
 class InformationDialog extends AlertDialog {
@@ -17,9 +18,9 @@ class InformationDialog extends AlertDialog {
           ),
           actions: <Widget>[
             if (onClose != null)
-              TextButton(
+              LnDialogButton.close(
+                text: LnLocalizations.current.ok,
                 onPressed: onClose,
-                child: Text(MaterialLocalizations.of(context).okButtonLabel),
               ),
           ],
         );
