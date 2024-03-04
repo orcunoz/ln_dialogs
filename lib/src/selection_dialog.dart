@@ -131,12 +131,7 @@ class _SelectionDialogState<ItemType> extends State<SelectionDialog<ItemType>> {
         width: widget.maxWidth,
         constraints: const BoxConstraints(minHeight: 200),
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: theme.dividerColor,
-              width: 0.5,
-            ),
-          ),
+          border: DividerBorders(theme.dividerColor).bottom,
         ),
         child: filteredItems.isNotEmpty
             ? ListView.builder(
@@ -144,6 +139,7 @@ class _SelectionDialogState<ItemType> extends State<SelectionDialog<ItemType>> {
                 itemCount: filteredItems.length,
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) => RadioListTile<ItemType>(
+                  dense: true,
                   title: HighlightedText(
                     widget.itemLabelBuilder(filteredItems.elementAt(index)),
                     highlightedText: _searchText,

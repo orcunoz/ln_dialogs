@@ -3,19 +3,6 @@ import 'package:ln_core/ln_core.dart';
 import 'package:ln_dialogs/ln_dialogs.dart';
 
 class MultiSelectionDialog<ItemType> extends StatefulWidget {
-  final String title;
-  final Iterable<ItemType> items;
-  final String Function(ItemType) itemLabelBuilder;
-  final Function(List<ItemType>) onSubmit;
-  final Function()? onCancel;
-  final List<ItemType> selectedItems;
-  final bool searchable;
-  final EdgeInsets padding;
-  final Color? headerBackgroundColor;
-  final bool shrinkWrap;
-  final Alignment? alignment;
-  final double maxWidth;
-
   const MultiSelectionDialog({
     super.key,
     required this.title,
@@ -31,6 +18,19 @@ class MultiSelectionDialog<ItemType> extends StatefulWidget {
     this.alignment,
     this.maxWidth = maxDialogWidth,
   });
+
+  final String title;
+  final Iterable<ItemType> items;
+  final String Function(ItemType) itemLabelBuilder;
+  final Function(List<ItemType>) onSubmit;
+  final Function()? onCancel;
+  final List<ItemType> selectedItems;
+  final bool searchable;
+  final EdgeInsets padding;
+  final Color? headerBackgroundColor;
+  final bool shrinkWrap;
+  final Alignment? alignment;
+  final double maxWidth;
 
   @override
   State<MultiSelectionDialog<ItemType>> createState() =>
@@ -80,10 +80,6 @@ class _MultiSelectionDialogState<ItemType>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final contentDividerBorderSide =
-        BorderSide(color: theme.dividerColor, width: 0.5);
-
     final filteredItems = widget.items.where(
         (e) => widget.itemLabelBuilder(e).toLowerCase().contains(_searchText));
 
@@ -119,9 +115,7 @@ class _MultiSelectionDialogState<ItemType>
       content: Container(
         width: maxDialogWidth,
         decoration: BoxDecoration(
-          border: Border(
-            bottom: contentDividerBorderSide,
-          ),
+          border: DividerBorders(Theme.of(context).dividerColor).bottom,
         ),
         child: filteredItems.isNotEmpty
             ? ListView.builder(

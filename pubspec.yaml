@@ -11,13 +11,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.18.0
+  intl: ^0.18.1
 
   ln_core:
+    #path: ../ln_core
     git:
       url: https://github.com/orcunoz/ln_core
       ref: main
 
 dev_dependencies:
-  lints: ^2.0.0
+  lints: ^3.0.0
   test: ^1.21.0

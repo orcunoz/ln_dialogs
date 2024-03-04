@@ -8,7 +8,6 @@ class InformationDialog extends AlertDialog {
     required BuildContext context,
     String? title,
     required String message,
-    Function()? onClose,
     double maxWidth = maxDialogWidth,
   }) : super(
           title: title == null ? null : Text(title),
@@ -17,11 +16,9 @@ class InformationDialog extends AlertDialog {
             child: Text(message),
           ),
           actions: <Widget>[
-            if (onClose != null)
-              LnDialogButton.close(
-                text: LnLocalizations.current.ok,
-                onPressed: onClose,
-              ),
+            LnDialogButton.close(
+              text: LnLocalizations.current.ok,
+            ),
           ],
         );
 
@@ -29,7 +26,6 @@ class InformationDialog extends AlertDialog {
     required BuildContext context,
     String? title,
     required String message,
-    Function()? onClose,
   }) {
     return showDialog(
       context: context,
@@ -38,10 +34,6 @@ class InformationDialog extends AlertDialog {
         context: context,
         title: title,
         message: message,
-        onClose: () {
-          Navigator.of(context).pop();
-          onClose?.call();
-        },
       ),
     );
   }

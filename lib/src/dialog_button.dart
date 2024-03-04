@@ -4,30 +4,29 @@ import 'package:ln_core/ln_core.dart';
 enum DialogActions { confirm, reject, close }
 
 class LnDialogButton extends StatelessWidget {
-  final String? text;
-  final void Function()? onPressed;
-  final Set<DialogActions> actions;
-
   const LnDialogButton({
     this.text,
     this.onPressed,
     this.actions = const {},
   });
+
   const LnDialogButton.close({
     this.text,
-    this.onPressed,
-    this.actions = const {DialogActions.close},
-  });
+  })  : onPressed = null,
+        actions = const {DialogActions.close};
+
   const LnDialogButton.confirm({
     this.text,
     this.onPressed,
-    this.actions = const {DialogActions.confirm, DialogActions.close},
-  });
+  }) : actions = const {DialogActions.confirm, DialogActions.close};
   const LnDialogButton.reject({
     this.text,
-    this.onPressed,
-    this.actions = const {DialogActions.reject, DialogActions.close},
-  });
+  })  : onPressed = null,
+        actions = const {DialogActions.reject, DialogActions.close};
+
+  final String? text;
+  final void Function()? onPressed;
+  final Set<DialogActions> actions;
 
   @override
   Widget build(BuildContext context) {

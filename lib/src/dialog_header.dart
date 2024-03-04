@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ln_core/ln_core.dart';
 
-class DialogHeader extends StatelessWidget {
-  final String title;
-  final bool searchable;
-  final Function(String)? onSearchTextChanged;
-  final Function()? onTapClose;
-  final Color? backgroundColor;
-  final Color? foregroundColor;
-  final BorderRadius? borderRadius;
-
+class DialogHeader extends StatelessWidget implements PreferredSizeWidget {
   const DialogHeader({
     super.key,
     required this.title,
@@ -18,42 +10,46 @@ class DialogHeader extends StatelessWidget {
     this.onTapClose,
     this.backgroundColor,
     this.foregroundColor,
-    this.borderRadius,
+    this.height,
+    this.elevation = .0,
   });
+
+  final String title;
+  final bool searchable;
+  final Function(String)? onSearchTextChanged;
+  final Function()? onTapClose;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final double? height;
+  final double elevation;
+
+  static BorderRadius? borderRadiusOf(BuildContext context,
+      {ThemeData? theme}) {
+    theme ??= Theme.of(context);
+    return (DialogTheme.of(context).shape?.borderRadius ??
+            theme.dialogTheme.shape?.borderRadius)
+        ?.at(context)
+        .copyWith(
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final titleForegroundColor =
-        foregroundColor ?? theme.dialogBackgroundColor.onColor;
+    final foregroundColor =
+        this.foregroundColor ?? theme.dialogBackgroundColor.onColor;
 
     final textFieldBorder = theme.inputDecorationTheme.defaultBorder;
 
-    final headerBorderRadius =
-        (borderRadius ?? theme.dialogTheme.shape?.borderRadius?.at(context))
-            ?.copyWith(
-      bottomLeft: Radius.zero,
-      bottomRight: Radius.zero,
-    );
-
-    return Material(
-      type: backgroundColor != null
-          ? MaterialType.canvas
-          : MaterialType.transparency,
-      color: backgroundColor,
-      borderRadius: headerBorderRadius,
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        constraints:
-            const BoxConstraints(minHeight: kMinInteractiveDimension + 0.5),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: 0.5,
-              color: theme.dividerColor,
-            ),
-          ),
-        ),
+    return SizedBox(
+      height: preferredSize.height,
+      child: Material(
+        color: backgroundColor ?? theme.dialogBackgroundColor,
+        type: MaterialType.transparency,
+        clipBehavior: Clip.antiAlias,
+        elevation: elevation,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,31 +57,32 @@ class DialogHeader extends StatelessWidget {
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (onTapClose != null)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(kToolbarHeight / 2),
+                    child: SizedBox.square(
+                      dimension: kToolbarHeight,
+                      child: Icon(Icons.arrow_back_rounded),
+                    ),
+                    onTap: onTapClose,
+                  )
+                else
+                  SizedBox(width: 8),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 12.0,
-                      bottom: 12.0,
-                      left: 20,
-                    ),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       title,
-                      maxLines: 5,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: titleForegroundColor,
+                        color: foregroundColor,
                         fontSize: 16,
                       ),
                     ),
                   ),
                 ),
-                if (onTapClose != null)
-                  IconButton(
-                    onPressed: onTapClose,
-                    icon: const Icon(Icons.close_rounded),
-                    color: titleForegroundColor,
-                  ),
               ],
             ),
             if (searchable)
@@ -96,27 +93,27 @@ class DialogHeader extends StatelessWidget {
                   bottom: 12,
                 ),
                 child: TextField(
-                  cursorColor: titleForegroundColor,
+                  cursorColor: foregroundColor,
                   onChanged: onSearchTextChanged,
                   style: TextStyle(
-                    color: titleForegroundColor,
+                    color: foregroundColor,
                   ),
                   decoration: InputDecoration(
                     constraints: const BoxConstraints(maxHeight: 42),
                     contentPadding: EdgeInsets.zero,
                     prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: titleForegroundColor,
+                      color: foregroundColor,
                     ),
                     hintText:
                         "${MaterialLocalizations.of(context).searchFieldLabel}...",
                     hintStyle: TextStyle(
-                      color: titleForegroundColor.withOpacity(0.7),
+                      color: foregroundColor.withOpacity(0.7),
                     ),
                     border: textFieldBorder,
                     enabledBorder: textFieldBorder,
                     focusedBorder: textFieldBorder,
-                    fillColor: titleForegroundColor.withOpacity(0.06),
+                    fillColor: foregroundColor.withOpacity(0.06),
                   ),
                 ),
               ),
@@ -125,4 +122,8 @@ class DialogHeader extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(
+      height ?? (kToolbarHeight + (searchable ? kMinInteractiveDimension : 0)));
 }
