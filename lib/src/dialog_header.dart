@@ -38,8 +38,7 @@ class DialogHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final foregroundColor =
-        this.foregroundColor ?? theme.dialogBackgroundColor.onColor;
+    final foregroundColor = this.foregroundColor ?? theme.tonalScheme.onSurface;
 
     final textFieldBorder = theme.inputDecorationTheme.defaultBorder;
 
@@ -62,8 +61,11 @@ class DialogHeader extends StatelessWidget implements PreferredSizeWidget {
                   InkWell(
                     borderRadius: BorderRadius.circular(kToolbarHeight / 2),
                     child: SizedBox.square(
-                      dimension: kToolbarHeight,
-                      child: Icon(Icons.arrow_back_rounded),
+                      dimension: kMinInteractiveDimension,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: foregroundColor,
+                      ),
                     ),
                     onTap: onTapClose,
                   )

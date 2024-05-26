@@ -1,13 +1,12 @@
 name: ln_dialogs
 description: Ln dialogs
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/orcunoz/ln_dialogs
 publish_to: none
 
 environment:
   sdk: ^3.0.5
 
-# Add regular dependencies here.
 dependencies:
   flutter:
     sdk: flutter
